@@ -6,6 +6,13 @@ using namespace std;
 #define CHECK_COND_CONTINUE(con) if(con)continue;
 #define CHECK_COND_BREAK(con) if(con)break;
 
+/************************************************************************************************/
+/*                                                                                              */
+/*                                                                                              */
+/*                                         sulotions                                            */
+/*                                                                                              */
+/*                                                                                              */
+/************************************************************************************************/
 class Solution
 {
 public:
@@ -113,6 +120,13 @@ public:
     }
 };
 
+/************************************************************************************************/
+/*                                                                                              */
+/*                                                                                              */
+/*                                         Test_Cases                                           */
+/*                                                                                              */
+/*                                                                                              */
+/************************************************************************************************/
 struct
 {
     int no;
@@ -130,7 +144,7 @@ int main(int argc, char const *argv[])
     Solution c{};
     for (auto &example : g_test_examples)
     {
-        cout << "begin to run test No." << example.no << "!" << endl;
+        cout << "\033[32mbegin to run test No." << example.no << "!\033[0m" << endl;
         vector<vector<int>> output = c.merge(example.input);
         EXPECT_EQ(output, example.expect);
     }
