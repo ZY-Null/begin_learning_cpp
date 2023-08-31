@@ -11,39 +11,43 @@ class Solution
 {
 public:
     // first test, time runout, shouldn't use this hash thing...
+    // switch to array, this one passed!
     int minTrioDegree(int n, vector<vector<int>> &edges)
     {
         int ret = -1;
-        unordered_map<int, unordered_set<int>> edges_map;
-        for(const vector<int> &edge:edges)
+        vector<vector<int>> ess(n, vector<int>(n, -1));
+        vector<int> e_num(n, 0);
+        for (const vector<int> &edge : edges)
         {
-            edges_map[edge[0]].emplace(edge[1]);
-            edges_map[edge[1]].emplace(edge[0]);
+            ess[edge[0] - 1][edge[1] - 1] = 1;
+            ess[edge[1] - 1][edge[0] - 1] = 1;
+            e_num[edge[0] - 1]++;
+            e_num[edge[1] - 1]++;
         }
-        auto IsPointConnected = [&edges_map](const int &i, const int &j) -> bool
+        auto IsConnected = [&ess](const int &i, const int &j) -> bool
         {
-            auto it_0 = edges_map.find(i);
-            if(edges_map.end() == it_0)
+            if (i == j)
                 return false;
-            return it_0->second.end() != it_0->second.find(j);
+            return ess[i][j] != -1;
         };
 
-        for (const auto &edge : edges)
+        for (const vector<int> &edge : edges)
         {
-            for (int i = 1; i <= n; i++)
+            const int &i = edge[0] - 1;
+            const int &j = edge[1] - 1;
+            for (int k = 0; k < n; k++)
             {
-                if(i == edge[0] || i == edge[1])
+                if(IsConnected(i,k)&&IsConnected(j,k))
                 {
-                    continue;
-                }
-                if (!(IsPointConnected(i, edge[0]) && IsPointConnected(i, edge[1])))
-                {
-                    continue;
-                }
-                int cnt = edges_map[i].size() + edges_map[edge[0]].size() + edges_map[edge[1]].size() - 6;
-                if (ret == -1 || ret > cnt)
-                {
-                    ret = cnt;
+                    int cnt = e_num[i] + e_num[j] + e_num[k] - 6;
+                    if(0 == cnt)
+                    {
+                        return 0;
+                    }
+                    if(ret == -1 || ret > cnt)
+                    {
+                        ret = cnt;
+                    }
                 }
             }
         }
@@ -82,6 +86,7 @@ void InitTestCases()
     sg_vec_test_cases.push_back({1, {3}, {6, {{1, 2}, {1, 3}, {3, 2}, {4, 1}, {5, 2}, {3, 6}}}});
     sg_vec_test_cases.push_back({2, {0}, {7, {{1, 3}, {4, 1}, {4, 3}, {2, 5}, {5, 6}, {6, 7}, {7, 5}, {2, 6}}}});
     sg_vec_test_cases.push_back({3, {0}, {4, {{ 1, 2 }, { 4, 1 }, { 4, 2 }}}});
+    sg_vec_test_cases.push_back({4, {7}, {17, {{12, 10}, {12, 16}, {4, 9}, {4, 6}, {14, 1}, {9, 2}, {17, 6}, {17, 12}, {8, 9}, {11, 14}, {13, 5}, {8, 15}, {13, 11}, {15, 11}, {15, 14}, {6, 8}, {12, 15}, {14, 12}, {9, 1}, {9, 10}, {10, 5}, {1, 11}, {2, 10}, {15, 1}, {7, 9}, {14, 2}, {4, 1}, {17, 7}, {3, 17}, {8, 1}, {17, 13}, {10, 13}, {8, 13}, {1, 7}, {2, 6}, {13, 6}, {7, 2}, {1, 16}, {6, 3}, {6, 9}, {16, 17}, {7, 14}}}});
     return;
 }
 
