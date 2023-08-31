@@ -6,7 +6,7 @@ using namespace std;
 /*                                         sulotions                                            */
 /*                                                                                              */
 /************************************************************************************************/
-// site: 
+// site:
 
 /************************************************************************************************/
 /*                                                                                              */
@@ -21,7 +21,13 @@ struct T_TEST_CONTAINER
     T_INT input;
 };
 // define your test case type here:
-static vector<T_TEST_CONTAINER<int, vector<int>>> sg_vec_test_cases;
+struct T_TestExpect
+{
+};
+struct T_TestCase
+{
+};
+static vector<T_TEST_CONTAINER<T_TestExpect, T_TestCase>> sg_vec_test_cases;
 void InitTestCases()
 {
     sg_vec_test_cases.clear();
